@@ -4,7 +4,7 @@ module.exports = (function () {
 	'use strict';
 
 	function SGSBrowserErrorLogger (config, callback) {
-		if(callback === undefined) {
+		if (callback === undefined) {
 			callback = config;
 			config = {};
 		}
@@ -15,7 +15,7 @@ module.exports = (function () {
 
 		var middlewares = [];
 
-		if(config.csp && config.csp.staticUrl && config.csp.apiUrl) {
+		if (config.csp && config.csp.staticUrl && config.csp.apiUrl) {
 			middlewares.push(helmet.csp({
 				defaultSrc: [
 					config.csp.staticUrl
@@ -36,7 +36,7 @@ module.exports = (function () {
 			helmet.hidePoweredBy(),
 		]);
 
-		if(config.https === true) {
+		if (config.https === true) {
 			var monthMs = 1000 * 60 * 60 * 24 * 31;
 
 			middlewares.unshift(helmet.hsts({

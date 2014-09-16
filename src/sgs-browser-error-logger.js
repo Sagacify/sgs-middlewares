@@ -2,14 +2,14 @@ module.exports = (function () {
 	'use strict';
 
 	function SGSBrowserErrorLogger (config, callback) {
-		if(callback === undefined) {
+		if (callback === undefined) {
 			callback = config;
 			config = {};
 		}
 
 		config = config || {};
 
-		if(typeof config.url !== 'string' || !config.url.length) {
+		if (typeof config.url !== 'string' || !config.url.length) {
 			throw 'Missing controller url for the browser handling';
 		}
 

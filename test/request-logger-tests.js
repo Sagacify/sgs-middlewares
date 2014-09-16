@@ -1,18 +1,12 @@
-var RequestLogger = require('../src/sgs-request-logger');
-
-var bodyParser = require('body-parser');
 var supertest = require('supertest');
-var express = require('express');
 var assert = require('assert');
+
+var createServer = require('./fixtures/create-server');
 
 module.exports = function () {
 	'use strict';
 
-	var port = 8000;
-
 	var saveToDatabase = function (request) {
-
-		console.log('HELLO - 2');
 		console.log(request);
 
 		it('Request log exists', function () {
@@ -23,32 +17,16 @@ module.exports = function () {
 			assert.equal(request._id.constructor.name, 'ObjectId');
 		});
 
+		// callback();
 	};
 
-	before(function (callback) {
-		var app = express();
+	var port = 8000;
 
-		app.use(new RequestLogger(saveToDatabase));
-		app.use(bodyParser.urlencoded({
-			extended: true
-		}));
-		app.use(bodyParser.json());
+	createServer(port, saveToDatabase);
 
-		app.get('/api/test', function (req, res) {
-			console.log('HELLO - 1');
-			res.status(200).end();
-		});
-
-		app
-		.listen(port)
-		.on('error', callback)
-		.on('listening', callback);
-	});
-
-	it('Make request to server', function (callback) {
-		supertest('http://localhost:' + port)
-		.get('/api/test')
-		.expect(200, callback);
-	});
+	supertest('http://127.0.0.1:' + port)
+	.get('/api/test?test=lol#oki')
+	.expect(200)
+	.end();
 
 };

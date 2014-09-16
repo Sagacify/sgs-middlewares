@@ -2,7 +2,7 @@ module.exports = (function () {
 	'use strict';
 
 	function SGSServerErrorLogger (config, callback) {
-		if(callback === undefined) {
+		if (callback === undefined) {
 			callback = config;
 			config = {};
 		}

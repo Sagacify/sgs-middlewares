@@ -6,7 +6,7 @@ module.exports = (function () {
 	'use strict';
 
 	function SGSRequestLogger (config, callback) {
-		if(callback === undefined) {
+		if (callback === undefined) {
 			callback = config;
 			config = {};
 		}
@@ -30,18 +30,19 @@ module.exports = (function () {
 
 	SGSRequestLogger.prototype.log = function (req, res) {
 		return function (e) {
-			if(e) {
+			if (e) {
 				return console.log(e);
 			}
 
 			var url = this.getUrl(req);
+
 			this.save({
 				_id: req.data.id,
 				url: {
 					hash: url.hash,
 					path: url.pathname,
 					query: req.query,
-					hostname: url.hostname
+					hostname: this.getHostname(req)
 				},
 				body: this.getBody(req),
 				user: this.getUser(req),
@@ -50,9 +51,10 @@ module.exports = (function () {
 				headers: this.getHeaders(req),
 				referrer: this.getReferrer(req),
 				protocol: this.getProtocol(req),
-				ip_address: this.getIpAddress(req),
-				content_type: this.getContentType(req),
-				response_time: this.getResponseTime(req)
+				ipAddress: this.getIpAddress(req),
+				userAgent: this.getUserAgent(req),
+				contentType: this.getContentType(req),
+				responseTime: this.getResponseTime(req)
 			});
 		};
 	};
@@ -63,10 +65,10 @@ module.exports = (function () {
 
 	SGSRequestLogger.prototype.getBody = function (req) {
 		var body = req.body;
-		if(typeof body === 'string' && body.length) {
+		if (typeof body === 'string' && body.length) {
 			return body;
 		}
-		if(typeof body === 'object' && Object.keys(body).length) {
+		if (typeof body === 'object' && Object.keys(body).length) {
 			return body;
 		}
 		return null;
@@ -85,11 +87,15 @@ module.exports = (function () {
 	};
 
 	SGSRequestLogger.prototype.getHeaders = function (req) {
-		return req.headers;
+		return req.headers || null;
+	};
+
+	SGSRequestLogger.prototype.getHostname = function (req) {
+		return req.hostname || null;
 	};
 
 	SGSRequestLogger.prototype.getReferrer = function (req) {
-		return req.headers.referer || req.headers.referrer;
+		return req.headers.referer || req.headers.referrer || null;
 	};
 
 	SGSRequestLogger.prototype.getProtocol = function (req) {
@@ -101,16 +107,16 @@ module.exports = (function () {
 	};
 
 	SGSRequestLogger.prototype.getUserAgent = function (req) {
-		return req.headers['user-agent'];
+		return req.headers['user-agent'] || null;
 	};
 
 	SGSRequestLogger.prototype.getContentType = function (req) {
-		return req.headers['content-type'];
+		return req.headers['content-type'] || null;
 	};
 
 	SGSRequestLogger.prototype.getResponseTime = function (req) {
 		var diff = process.hrtime(req.data.startTime);
-		return (diff[0] * 1e+3 + diff[1] * 1e-6).toFixed(3);
+		return +(diff[0] * 1e+3 + diff[1] * 1e-6).toFixed(3);
 	};
 
 	return SGSRequestLogger;
