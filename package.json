@@ -9,7 +9,7 @@
 	},
 	"dependencies": {
 		"bson": "^0.2.15",
-		"helemt": "^0.4.1",
+		"helmet": "^0.4.1",
 		"body-parser": "^1.8.1",
 		"on-finished": "^2.1.0"
 	},
