@@ -3,7 +3,7 @@ var helmet = require('helmet');
 module.exports = (function () {
 	'use strict';
 
-	function SGSBrowserErrorLogger (config, callback) {
+	function SGSSecurity (config, callback) {
 		if (callback === undefined) {
 			callback = config;
 			config = {};
@@ -48,6 +48,6 @@ module.exports = (function () {
 		return middlewares;
 	}
 
-	return SGSBrowserErrorLogger;
+	return SGSSecurity;
 
 })();

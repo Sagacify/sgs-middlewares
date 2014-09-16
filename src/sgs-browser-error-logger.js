@@ -9,10 +9,6 @@ module.exports = (function () {
 
 		config = config || {};
 
-		if (typeof config.url !== 'string' || !config.url.length) {
-			throw 'Missing controller url for the browser handling';
-		}
-
 		this.save = callback || function () {};
 
 		return this.middleware.bind(this);
