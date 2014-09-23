@@ -29,7 +29,7 @@ module.exports = function () {
 		supertest('http://127.0.0.1:' + port)
 		.get('/api/test?test=lol#oki')
 		.expect(200)
-		.end();
+		.end(function (e, res) {});
 	});
 
 };

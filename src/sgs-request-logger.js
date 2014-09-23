@@ -6,17 +6,12 @@ module.exports = (function () {
 	'use strict';
 
 	function SGSRequestLogger (config, callback) {
-		if (callback === undefined && typeof config === 'function') {
+		if (callback === undefined) {
 			callback = config;
 			config = {};
 		}
 
 		config = config || {};
-
-		this.stdout = false;
-		if(typeof config.stdout === 'boolean') {
-			this.stdout = config.stdout;
-		}
 
 		this.save = callback || function () {};
 
@@ -41,13 +36,14 @@ module.exports = (function () {
 				return console.log(e);
 			}
 
-			var url = this.getParsedUrl(req);
+			var parsedUrl = this.getParsedUrl(req);
 
-			var requestLog = {
+			this.save({
 				_id: req.data.id,
 				url: {
-					hash: url.hash,
-					path: url.pathname,
+					raw: this.getUrl(req),
+					hash: parsedUrl.hash,
+					path: parsedUrl.pathname,
 					query: req.query,
 					hostname: this.getHostname(req)
 				},
@@ -62,20 +58,7 @@ module.exports = (function () {
 				userAgent: this.getUserAgent(req),
 				contentType: this.getContentType(req),
 				responseTime: this.getResponseTime(req)
-			};
-
-			if(this.stdout === true) {
-				console.log([
-					requestLog.method,
-					requestLog.status,
-					this.getUrl(req),
-					requestLog.responseTime,
-					'ms ->',
-					requestLog.ipAddress
-				].join(' '));
-			}
-
-			this.save(requestLog);
+			});
 		};
 	};
 
