@@ -6,7 +6,7 @@ module.exports = (function () {
 	'use strict';
 
 	function SGSRequestLogger (config, callback) {
-		if (callback === undefined) {
+		if (callback === undefined && typeof config === 'function') {
 			callback = config;
 			config = {};
 		}
