@@ -9,10 +9,14 @@ module.exports = (function () {
 	function createServer (port, saveToDatabase) {
 		var app = express();
 
-		app.use(new RequestLogger(saveToDatabase));
+		app.use(new RequestLogger({
+			stdout: true
+		}, saveToDatabase));
+
 		app.use(bodyParser.urlencoded({
 			extended: true
 		}));
+
 		app.use(bodyParser.json());
 
 		app.get('/api/test', function (req, res) {

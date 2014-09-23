@@ -13,6 +13,11 @@ module.exports = (function () {
 
 		config = config || {};
 
+		this.stdout = false;
+		if(typeof config.stdout === 'boolean') {
+			this.stdout = config.stdout;
+		}
+
 		this.save = callback || function () {};
 
 		return this.middleware.bind(this);
@@ -29,14 +34,16 @@ module.exports = (function () {
 	};
 
 	SGSRequestLogger.prototype.log = function (req, res) {
+		var ipAddress = this.getIpAddress(req);
+
 		return function (e) {
 			if (e) {
 				return console.log(e);
 			}
 
-			var url = this.getUrl(req);
+			var url = this.getParsedUrl(req);
 
-			this.save({
+			var requestLog = {
 				_id: req.data.id,
 				url: {
 					hash: url.hash,
@@ -51,16 +58,33 @@ module.exports = (function () {
 				headers: this.getHeaders(req),
 				referrer: this.getReferrer(req),
 				protocol: this.getProtocol(req),
-				ipAddress: this.getIpAddress(req),
+				ipAddress: ipAddress,
 				userAgent: this.getUserAgent(req),
 				contentType: this.getContentType(req),
 				responseTime: this.getResponseTime(req)
-			});
+			};
+
+			if(this.stdout === true) {
+				console.log([
+					requestLog.method,
+					requestLog.status,
+					this.getUrl(req),
+					requestLog.responseTime,
+					'ms ->',
+					requestLog.ipAddress
+				].join(' '));
+			}
+
+			this.save(requestLog);
 		};
 	};
 
 	SGSRequestLogger.prototype.getUrl = function (req) {
-		return url.parse(req.originalUrl);
+		return req.originalUrl;
+	};
+
+	SGSRequestLogger.prototype.getParsedUrl = function (req) {
+		return url.parse(this.getUrl(req));
 	};
 
 	SGSRequestLogger.prototype.getBody = function (req) {

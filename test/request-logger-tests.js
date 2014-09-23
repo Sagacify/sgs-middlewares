@@ -6,27 +6,30 @@ var createServer = require('./fixtures/create-server');
 module.exports = function () {
 	'use strict';
 
-	var saveToDatabase = function (request) {
-		console.log(request);
 
-		it('Request log exists', function () {
-			assert.equal(typeof request, 'object');
-		});
+	it('Simple request log', function (callback) {
+		var saveToDatabase = function (request) {
+			console.log(request);
 
-		it('Request log contains id', function () {
-			assert.equal(request._id.constructor.name, 'ObjectId');
-		});
+			// it('Request log exists', function () {
+				assert.equal(typeof request, 'object');
+			// });
 
-		// callback();
-	};
+			// it('Request log contains id', function () {
+				assert.equal(request._id.constructor.name, 'ObjectID');
+			// });
 
-	var port = 8000;
+			callback();
+		};
 
-	createServer(port, saveToDatabase);
+		var port = 8000;
 
-	supertest('http://127.0.0.1:' + port)
-	.get('/api/test?test=lol#oki')
-	.expect(200)
-	.end();
+		createServer(port, saveToDatabase);
+
+		supertest('http://127.0.0.1:' + port)
+		.get('/api/test?test=lol#oki')
+		.expect(200)
+		.end();
+	});
 
 };
