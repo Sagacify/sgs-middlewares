@@ -82,7 +82,7 @@ module.exports = (function () {
 	};
 
 	SGSRequestLogger.prototype.getUser = function (req) {
-		return (req.data && req.data.user) ? req.data.user._id : null;
+		return req.user ? req.user._id : null;
 	};
 
 	SGSRequestLogger.prototype.getMethod = function (req) {
@@ -122,6 +122,10 @@ module.exports = (function () {
 	};
 
 	SGSRequestLogger.prototype.getResponseTime = function (req) {
+		// if(!req.data.startTime) {
+		// 	return 0;
+		// }
+
 		var diff = process.hrtime(req.data.startTime);
 		return +(diff[0] * 1e+3 + diff[1] * 1e-6).toFixed(3);
 	};
