@@ -16,7 +16,7 @@ module.exports = (function () {
 
 	SGSBrowserErrorLogger.prototype.middleware = function (req, res) {
 		this.save({
-			id: req.data.id,
+			reqId: req.data.id,
 			name: req.body.name,
 			stack: req.body.stack,
 			message: req.body.message

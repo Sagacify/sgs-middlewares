@@ -20,7 +20,6 @@ module.exports = (function () {
 		app.use(bodyParser.json());
 
 		app.get('/api/test', function (req, res) {
-			console.log('HELLO - 1');
 			res.status(200).end();
 		});
 
