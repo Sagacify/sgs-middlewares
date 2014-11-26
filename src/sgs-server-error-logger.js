@@ -16,7 +16,7 @@ module.exports = (function () {
 
 	SGSServerErrorLogger.prototype.middleware = function (error, req, res, next) {
 		this.save({
-			id: req.data.id,
+			reqId: req.data.id,
 			name: error.name,
 			stack: error.stack,
 			message: error.message
