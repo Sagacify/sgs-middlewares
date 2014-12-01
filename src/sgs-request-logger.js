@@ -40,6 +40,7 @@ module.exports = (function () {
 
 			this.save({
 				_id: req.data.id,
+				pid: process.pid,
 				url: {
 					raw: this.getUrl(req),
 					hash: parsedUrl.hash,
