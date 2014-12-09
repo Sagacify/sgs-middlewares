@@ -1,15 +1,18 @@
 module.exports = (function () {
 	'use strict';
 
-	function SGSServerErrorLogger (config, callback) {
-		if (callback === undefined) {
-			callback = config;
+	function SGSServerErrorLogger (config, saveCallback, sendCallback) {
+		if (sendCallback === undefined) {
+			saveCallback = config;
+			sendCallback = saveCallback;
 			config = {};
 		}
 
 		config = config || {};
 
-		this.save = callback || function () {};
+		this.save = saveCallback || function () {};
+
+		this.send = sendCallback;
 
 		return this.middleware.bind(this);
 	}
@@ -23,15 +26,17 @@ module.exports = (function () {
 			message: error.message
 		});
 
-		res.status(500).json({
-			error: {
-				id: req.data.id,
-				code: error.code,
-				status: 500
-			}
-		});
+		if (this.send === undefined) {
+			return res.status(500).json({
+				error: {
+					id: req.data.id,
+					code: error.code,
+					status: 500
+				}
+			});
+		}
 
-		next = null;
+		this.send(error, req, res, next);
 	};
 
 	return SGSServerErrorLogger;
