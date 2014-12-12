@@ -3,8 +3,8 @@ module.exports = (function () {
 
 	function SGSServerErrorLogger (config, saveCallback, sendCallback) {
 		if (sendCallback === undefined) {
-			saveCallback = config;
 			sendCallback = saveCallback;
+			saveCallback = config;
 			config = {};
 		}
 
@@ -31,13 +31,15 @@ module.exports = (function () {
 		});
 
 		if (this.send === undefined) {
-			return res.status(500).json({
-				error: {
-					id: req.data.id,
-					code: error.code,
-					status: 500
-				}
-			});
+			return res
+				.status(500)
+				.json({
+					error: {
+						id: req.data.id,
+						code: error.code,
+						status: 500
+					}
+				});
 		}
 
 		this.send(error, req, res, next);
