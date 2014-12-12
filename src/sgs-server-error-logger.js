@@ -18,6 +18,10 @@ module.exports = (function () {
 	}
 
 	SGSServerErrorLogger.prototype.middleware = function (error, req, res, next) {
+		if (!(error instanceof Error)) {
+			error = new Error(error);
+		}
+
 		this.save({
 			pid: process.pid,
 			reqId: req.data.id,
