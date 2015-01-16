@@ -52,6 +52,7 @@ module.exports = (function () {
 				user: this.getUser(req),
 				method: this.getMethod(req),
 				status: this.getStatus(res),
+				created: Date.now(),
 				headers: this.getHeaders(req),
 				referrer: this.getReferrer(req),
 				protocol: this.getProtocol(req),

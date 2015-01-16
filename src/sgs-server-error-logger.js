@@ -27,6 +27,7 @@ module.exports = (function () {
 			reqId: req.data.id,
 			name: error.name,
 			stack: error.stack,
+			created: Date.now(),
 			message: error.message
 		});
 
